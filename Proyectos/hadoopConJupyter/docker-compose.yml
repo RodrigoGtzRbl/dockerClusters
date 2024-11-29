@@ -1,0 +1,91 @@
+#version: '3.1'
+
+networks:
+    hadoop-net:
+        driver: bridge
+
+services:
+
+  namenode:
+    build: ./NameNode
+    image: kamehouse0/hadoop-with-jupyter-namenode:latest
+    container_name: hadoop-jupiter-namenode
+    hostname: namenode
+    command: /opt/bd/start-daemons.sh
+    ports:
+        - "9870:9870"
+        - "8020:8020"
+        - "9000:9000"
+        - "8888:8888"
+    volumes:
+        - /home/popos/Documentos/0-PERSONAL/academico/IABD/compartidaDocker:/home/compartido
+    networks:
+        - hadoop-net
+
+  resourcemanager:
+    build: ./ResourceManager
+    image: kamehouse0/hadoop-with-jupyter-resourcemanager:latest
+    container_name: hadoop-with-jupyter-resourcemanager
+    hostname: resourcemanager
+    command: /opt/bd/start-daemons.sh
+    ports:
+        - "8088:8088"
+    networks:
+        - hadoop-net
+
+  dnnm1:
+    build: ./DataNode-NodeManager
+    image: kamehouse0/hadoop-with-jupyter-datanode:latest
+    container_name: dnnm1
+    hostname: dnnm1
+    restart: always
+    ports:
+        - 9866:9866
+        - 9864:9864
+    depends_on:
+        - namenode
+        - resourcemanager
+    command: /opt/bd/start-daemons.sh
+    networks:
+        - hadoop-net
+    environment:
+       SERVICE_PRECONDITION: "namenode:9870"
+
+  dnnm2:
+    build: ./DataNode-NodeManager
+    image: kamehouse0/hadoop-with-jupyter-datanode:latest
+    container_name: dnnm2
+    hostname: dnnm2
+    restart: always
+    ports:
+        - 9867:9866
+        - 9863:9864
+    depends_on:
+        - namenode
+        - resourcemanager
+    command: /opt/bd/start-daemons.sh
+    networks:
+        - hadoop-net
+    environment:
+       SERVICE_PRECONDITION: "namenode:9870"
+
+  dnnm3:
+    build: ./DataNode-NodeManager
+    image: kamehouse0/hadoop-with-jupyter-datanode:latest
+    container_name: dnnm3
+    hostname: dnnm3
+    restart: always
+    ports:
+        - 9868:9868
+        - 9865:9864
+    depends_on:
+        - namenode
+        - resourcemanager
+    command: /opt/bd/start-daemons.sh
+    networks:
+        - hadoop-net
+    environment:
+       SERVICE_PRECONDITION: "namenode:9870"
+    
+
+

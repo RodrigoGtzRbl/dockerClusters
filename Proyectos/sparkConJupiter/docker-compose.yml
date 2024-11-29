@@ -1,0 +1,88 @@
+#version: '3.1'
+
+networks:
+    hadoop-net:
+        driver: bridge
+
+services:
+
+  master:
+    build: ./Master
+    image: spark-master-jupyter:latest
+    container_name: spark-master
+    hostname: spark-master
+    command: /opt/bd/start-daemons.sh
+    ports:
+        - "9870:9870"
+        - "8020:8020"
+        - "9000:9000"
+        - "8888:8888"
+    volumes:
+        - /home/popos/Documentos/0-PERSONAL/academico/IABD/compartidaDocker:/home/compartido
+    networks:
+        - hadoop-net
+
+  resourcemanager:
+    build: ./ResourceManager
+    image: spark-resourcemanager-image:latest
+    container_name: spark-resourcemanager
+    hostname: spark-resourcemanager
+    command: /opt/bd/start-daemons.sh
+    ports:
+        - "8088:8088"
+    networks:
+        - hadoop-net
+
+  worker1:
+    build: ./Worker
+    image: spark-worker-jupyter:latest
+    container_name: sw1
+    hostname: sw1
+    restart: always
+    ports:
+      - 9866:9866
+      - 9864:9864
+    depends_on:
+      - master
+    command: /opt/bd/start-daemons.sh
+    networks:
+      - hadoop-net
+    environment:
+      SERVICE_PRECONDITION: "spark-master:7077"
+
+  worker2:
+    build: ./Worker
+    image: spark-worker-jupyter:latest
+    container_name: sw2
+    hostname: sw2
+    restart: always
+    ports:
+      - 9867:9866
+      - 9863:9864
+    depends_on:
+      - master
+    command: /opt/bd/start-daemons.sh
+    networks:
+      - hadoop-net
+    environment:
+      SERVICE_PRECONDITION: "spark-master:7077"
+
+  worker3:
+    build: ./Worker
+    image: spark-worker-jupyter:latest
+    container_name: sw3
+    hostname: sw3
+    restart: always
+    ports:
+        - 9868:9868
+        - 9865:9864
+    depends_on:
+        - master
+    command: /opt/bd/start-daemons.sh
+    networks:
+        - hadoop-net
+    environment:
+       SERVICE_PRECONDITION: "spark-master:9870"
+    
+
+
