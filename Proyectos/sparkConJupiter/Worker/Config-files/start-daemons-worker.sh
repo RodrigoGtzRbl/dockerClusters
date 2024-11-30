@@ -21,7 +21,7 @@ ${SPARK_HOME}/sbin/start-worker.sh spark://spark-master:7077
 
 # Iniciar Jupyter Notebook en segundo plano
 echo "Iniciando Jupyter Notebook..."
-nohup jupyter notebook --ip=0.0.0.0 --no-browser --allow-root --port=8888 > ${LOG_FILE} 2>&1 &
+nohup bash -c "source ${VENV_DIR}/bin/activate && jupyter notebook --ip=0.0.0.0 --no-browser --allow-root --port=8888" > ${LOG_FILE} 2>&1 &
 
 # Mantener el contenedor activo mientras el Spark Worker esté en ejecución
 tail -f /dev/null

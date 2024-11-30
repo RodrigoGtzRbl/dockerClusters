@@ -19,13 +19,9 @@ while ! nc -z spark-master 7077; do
     sleep 2
 done
 
-# Activar el entorno virtual
+# Activar el entorno virtual y jupyter notebook
 echo "Activando el entorno virtual..."
 nohup bash -c "source ${VENV_DIR}/bin/activate && jupyter notebook --ip=0.0.0.0 --no-browser --allow-root --port=8888" > ${LOG_FILE} 2>&1 &
-
-# Iniciar Jupyter Notebook en segundo plano
-echo "Iniciando Jupyter Notebook..."
-nohup jupyter notebook --ip=0.0.0.0 --no-browser --allow-root --port=8888 > ${LOG_FILE} 2>&1 &
 
 # Mantener el contenedor activo mientras el Spark Master esté en ejecución
 tail -f /dev/null

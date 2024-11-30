@@ -35,8 +35,8 @@ RUN mkdir -p ${SPARK_HOME}/logs && \
     chmod -R 777 ${SPARK_HOME}
 
 # Copiar archivos de configuración (si es necesario)
-COPY Config-files/start-daemons-resourcemanager.sh ${BASE_DIR}/start-daemons.sh
-RUN chmod +x ${BASE_DIR}/start-daemons.sh
+COPY Config-files/start-daemons-resourcemanager.sh ${BASE_DIR}/start-daemons-resourcemanager.sh
+RUN chmod +x ${BASE_DIR}/start-daemons-resourcemanager.sh
 
 # Exponer puertos necesarios para Spark y Jupyter
 EXPOSE 7077 8080 4040 8888
@@ -45,5 +45,5 @@ EXPOSE 7077 8080 4040 8888
 USER spark-user
 
 # Comando para ejecutar el Spark Master y Jupyter
-CMD ["/opt/bd/start-daemons.sh"]
+CMD ["/opt/bd/start-daemons-resourcemanager.sh"]
 

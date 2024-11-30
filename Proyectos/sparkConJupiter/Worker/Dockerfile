@@ -1,5 +1,5 @@
 # Usar la imagen base con Spark
-FROM base-spark-jupyter-image:latest
+FROM kamehouse0/spark-and-jupyter-base:latest
 MAINTAINER dev <rodrigogutierrez@rogudev.com>
 
 # Definir variables de entorno
@@ -12,10 +12,10 @@ ENV VENV_DIR=/opt/venv
 RUN mkdir -p ${SPARK_HOME}/logs
 
 # Copiar el script de inicio para los workers
-COPY Config-files/start-daemons-worker.sh ${BASE_DIR}/start-daemons.sh
+COPY Config-files/start-daemons-worker.sh ${BASE_DIR}/start-daemons-worker.sh
 
 # Establecer permisos
-RUN chmod +x ${BASE_DIR}/start-daemons.sh && \
+RUN chmod +x ${BASE_DIR}/start-daemons-worker.sh && \
     chown -R hdadmin:spark ${BASE_DIR}
 
 # Instalar python3-venv para entorno virtual
@@ -30,10 +30,10 @@ RUN python3 -m venv ${VENV_DIR} && \
     ${VENV_DIR}/bin/pip install jupyter findspark
 
 # Exponer puertos necesarios
-EXPOSE 9866 9864
+EXPOSE 9866 9864 8888
 
 # Cambiar al usuario no root (hdadmin)
 USER hdadmin
 
-CMD ["/opt/bd/start-daemons.sh"]
+CMD ["/opt/bd/start-daemons-worker.sh"]
 

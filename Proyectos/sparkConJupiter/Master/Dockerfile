@@ -1,4 +1,4 @@
-FROM base-spark-jupyter-image:latest
+FROM kamehouse0/spark-and-jupyter-base:latest
 
 # Cambia a root para ejecutar los comandos de instalación
 USER root
@@ -15,15 +15,15 @@ RUN echo "$LOG_TAG Creando directorio para los logs de Spark" && \
     mkdir -p ${SPARK_HOME}/logs
 
 # Copiar script de inicio 
-COPY Config-files/start-daemons-master.sh ${BASE_DIR}/start-daemons.sh
+COPY Config-files/start-daemons-master.sh ${BASE_DIR}/start-daemons-master.sh
 
 # Establece permisos
-RUN chmod +x ${BASE_DIR}/start-daemons.sh && \
+RUN chmod +x ${BASE_DIR}/start-daemons-master.sh && \
     chown -R hdadmin:spark ${BASE_DIR}
     
 # Actualizar el sistema y asegurar la instalación de python3-venv para entornos virtuales
 RUN apt-get update && \
-    apt-get install -y python3-venv && \
+    apt-get install -y python3-venv netcat-traditional  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -45,6 +45,6 @@ EXPOSE 8080 7077 4040 8888
 USER hdadmin
 
 
-CMD ["/opt/bd/start-daemons.sh"]
+CMD ["/opt/bd/start-daemons-master.sh"]
 
 
