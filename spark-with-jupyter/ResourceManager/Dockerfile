@@ -4,12 +4,12 @@ MAINTAINER dev <rodrigogutierrez@rogudev.com>
 # Instalar dependencias básicas
 USER root
 RUN apt-get update && \
-    apt-get install -y openjdk-8-jre python3 python3-venv curl gnupg2 && \
+    apt-get install -y openjdk-11-jre python3 python3-venv curl gnupg2 netcat-traditional && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Definir variables de entorno
-ENV SPARK_VERSION 3.3.1
+ENV SPARK_VERSION 3.5.3
 ENV BASE_DIR /opt/bd
 ENV SPARK_HOME ${BASE_DIR}/spark
 ENV VENV_DIR /opt/venv

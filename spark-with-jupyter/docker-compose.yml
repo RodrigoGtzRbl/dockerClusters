@@ -1,7 +1,7 @@
 #version: '3.1'
 
 networks:
-    hadoop-net:
+    spark-cluster-net:
         driver: bridge
 
 services:
@@ -20,7 +20,7 @@ services:
     volumes:
         - /home/popos/Documentos/0-PERSONAL/academico/IABD/compartidaDocker:/home/compartido
     networks:
-        - hadoop-net
+        - spark-cluster-net
 
   resourcemanager:
     build: ./ResourceManager
@@ -31,14 +31,14 @@ services:
     ports:
         - "8088:8088"
     networks:
-        - hadoop-net
+        - spark-cluster-net
 
   worker1:
     build: ./Worker
     image: kamehouse0/spark-and-jupyter-worker:latest
     container_name: sw1
     hostname: sw1
-    restart: always
+    #restart: always
     ports:
       - 9866:9866
       - 9864:9864
@@ -46,7 +46,7 @@ services:
       - master
     command: /opt/bd/start-daemons-worker.sh
     networks:
-      - hadoop-net
+      - spark-cluster-net
     environment:
       SERVICE_PRECONDITION: "spark-master:7077"
 
@@ -55,7 +55,7 @@ services:
     image: kamehouse0/spark-and-jupyter-worker:latest
     container_name: sw2
     hostname: sw2
-    restart: always
+    #restart: always
     ports:
       - 9867:9866
       - 9863:9864
@@ -63,7 +63,7 @@ services:
       - master
     command: /opt/bd/start-daemons-worker.sh
     networks:
-      - hadoop-net
+      - spark-cluster-net
     environment:
       SERVICE_PRECONDITION: "spark-master:7077"
 
@@ -72,7 +72,7 @@ services:
     image: kamehouse0/spark-and-jupyter-worker:latest
     container_name: sw3
     hostname: sw3
-    restart: always
+    #restart: always
     ports:
         - 9868:9868
         - 9865:9864
@@ -80,7 +80,7 @@ services:
         - master
     command: /opt/bd/start-daemons-worker.sh
     networks:
-        - hadoop-net
+        - spark-cluster-net
     environment:
        SERVICE_PRECONDITION: "spark-master:7077"
     

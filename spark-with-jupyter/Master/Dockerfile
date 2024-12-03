@@ -4,7 +4,7 @@ FROM kamehouse0/spark-and-jupyter-base:latest
 USER root
 
 # Definir variables de entorno para Spark
-ENV SPARK_VERSION=3.3.1
+ENV SPARK_VERSION=3.5.3
 ENV LOG_TAG="[Spark_${SPARK_VERSION}]:"
 ENV BASE_DIR=/opt/bd
 ENV SPARK_HOME=${BASE_DIR}/spark
@@ -33,7 +33,7 @@ RUN python3 -m venv ${VENV_DIR} && \
 
 # Instalar Jupyter y findspark en el entorno virtual
 RUN ${VENV_DIR}/bin/pip install --upgrade pip && \
-    ${VENV_DIR}/bin/pip install jupyter findspark
+    ${VENV_DIR}/bin/pip install jupyter findspark pyspark
 
 # Establecer permisos en el entorno virtual
 RUN chown -R hdadmin:spark ${VENV_DIR}
